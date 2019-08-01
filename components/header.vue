@@ -21,7 +21,7 @@
       </el-row>
 
       <!-- 登录信息 -->
-      <div v-if="false">
+      <div v-if="!$store.state.user.userInfo.token">
         <nuxt-link to="/user/login">登录注册</nuxt-link>
       </div>
       <!-- 登录后的布局 -->
@@ -30,7 +30,8 @@
           <span class="el-dropdown-link">
             <img src="http://157.122.54.189:9095/assets/images/avatar.jpg"
                  alt="">
-            小米加步枪<i class="el-icon-arrow-down el-icon--right"></i>
+            {{$store.state.user.userInfo.user.nickname}}
+            <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
@@ -38,10 +39,8 @@
                 个人中心
               </nuxt-link>
             </el-dropdown-item>
-            <el-dropdown-item>
-              <div>
+            <el-dropdown-item @click.native="handleLogout">
                 退出
-              </div>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -53,7 +52,15 @@
 </template>
 <script >
 export default {
-
+  mounted(){
+    
+  },
+  methods:{
+    handleLogout(){
+      // console.log("退出");
+      this.$store.commit("user/cleanUserInfo")
+    }
+  }
 }
 </script>
 
