@@ -83,7 +83,11 @@ export default {
   methods: {
     // tab切换时触发
     handleSearchTab (item, index) {
-
+      if(index===1){
+        this.$alert("暂时不支持往返","提示",{
+          type:"warning"
+        })
+      }
     },
 
     // 出发城市输入框获得焦点时触发
@@ -113,6 +117,11 @@ export default {
           item.value = item.name.replace('市', '');
           return item;
         })
+
+        //当用户没有点击下拉框的内容时,设置第一个为选中的默认值
+        this.form.departCity = newData[0].value;
+        this.form.departCode = newData[0].sort;
+        
         cb(newData)
       })
     },
@@ -140,6 +149,11 @@ export default {
           item.value = item.name.replace('市', '');
           return item;
         })
+
+        //当用户没有点击下拉框的内容时,设置第一个为选中的默认值
+        this.form.destCity = newData[0].value;
+        this.form.destCode = newData[0].sort;
+
         cb(newData)
       })
 
@@ -147,7 +161,6 @@ export default {
 
     // 出发城市下拉选择时触发
     handleDepartSelect (item) {
-      console.log(item);
       this.form.departCity = item.value;
       this.form.departCode = item.sort;
     },
@@ -155,7 +168,6 @@ export default {
     // 目标城市下拉选择时触发
     handleDestSelect (item) {
       this.form.destCity = item.value;
-      console.log(item)
       this.form.destCode = item.sort;
     },
 
@@ -167,16 +179,41 @@ export default {
 
     // 触发和目标城市切换时触发
     handleReverse () {
-
+      const {departCity,departCode, destCity,destCode}=this.form
+      this.form.departCity =destCity
+      this.form.departCode =destCode
+      this.form.destCity=departCity 
+      this.form.destCode=departCode 
     },
 
     // 提交表单时触发
     handleSubmit () {
       // console.log(this.form);
+
+      //表单验证
+      if (!this.form.departCity) {
+        this.$alert("出发城市不能为空", "提示", {
+          type: "warning"
+        })
+        return
+      }
+      if (!this.form.destCity) {
+        this.$alert("到达城市不能为空", "提示", {
+          type: "warning"
+        })
+        return
+      }
+      if (!this.form.departDate) {
+        this.$alert("出发日期不能为空", "提示", {
+          type: "warning"
+        })
+        return
+      }
+
       // 跳转到机票列表页
       this.$router.push({
-        path:'/air/flights',
-        query:this.form
+        path: '/air/flights',
+        query: this.form
       })
     }
   },
